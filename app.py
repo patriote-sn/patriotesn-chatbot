@@ -19,14 +19,14 @@ pinecone_env = os.getenv("PINECONE_ENV")
 index_name = "patriotesn"
 
 if not pinecone_api_key or not pinecone_env:
-    raise ValueError("PINECONE_API_KEY or PINECONE_ENV not set in environment.")
+    raise ValueError("PINECONE_API_KEY or PINECONE_ENV is not defined. It should be.")
 
 pc = Pinecone(api_key=pinecone_api_key, environment=pinecone_env)
 
 # Vérification de l'index existant
 existing_indexes = [idx_info["name"] for idx_info in pc.list_indexes()]
 if index_name not in existing_indexes:
-    raise ValueError(f"L'index {index_name} n'existe pas sur Pinecone.")
+    raise ValueError(f"Index {index_name} does not exist on Pinecone.")
 
 # Récupération de l'index
 index = pc.Index(index_name)
@@ -34,7 +34,7 @@ index = pc.Index(index_name)
 # Configuration OpenAI
 openai_api_key = os.getenv("OPENAI_API_KEY")
 if not openai_api_key:
-    raise ValueError("OPENAI_API_KEY non définie.")
+    raise ValueError("OPENAI_API_KEY is not defined. It should be")
 
 embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
 vector_store = PineconeVectorStore(index=index, embedding=embeddings)
@@ -60,7 +60,7 @@ class AnswerResponse(BaseModel):
 def ask_question(payload: QuestionRequest):
     user_question = payload.question
     if not user_question.strip():
-        raise HTTPException(status_code=400, detail="Question non valide")
+        raise HTTPException(status_code=400, detail="Invalid question")
 
     response = conversation_chain({"question": user_question})
     answer = response["answer"]
