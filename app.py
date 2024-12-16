@@ -56,6 +56,10 @@ class QuestionRequest(BaseModel):
 class AnswerResponse(BaseModel):
     answer: str
 
+@app.get("/")
+def root():
+    return {"message": "Hello from Patriote SN Chatbot API"}
+
 @app.post("/ask", response_model=AnswerResponse)
 def ask_question(payload: QuestionRequest):
     user_question = payload.question
