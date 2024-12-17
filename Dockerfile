@@ -7,8 +7,13 @@ RUN pip install -r requirements.txt
 
 WORKDIR /app
  
-COPY app.py app.py
+COPY . .
  
 EXPOSE 8000
- 
-CMD [ "uvicorn", "--host", "0.0.0.0", "--port", "8000" "app:app" ]
+
+RUN python -m pip show uvicorn
+
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+
+# Added for debugging to see the contents of the app directory (already checked so no longer needed)
+# CMD ["sh", "-c", "ls -l /app && uvicorn app:app --host 0.0.0.0 --port 8000"]
